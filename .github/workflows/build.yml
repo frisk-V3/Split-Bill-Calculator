@@ -1,0 +1,27 @@
+name: Compile C++ with MSVC
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: コードのチェックアウト
+      uses: actions/checkout@v4
+
+    - name: Visual Studio デベロッパー コマンド プロンプトのセットアップ
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: MSVCでコンパイル
+      run: |
+        cl.exe /EHsc /O2 /Fe:program.exe src/main.cpp
+
+    - name: 成果物(EXE)の保存
+      uses: actions/upload-artifact@v4
+      with:
+        name: compiled-exe-msvc
+        path: program.exe
